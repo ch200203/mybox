@@ -4,8 +4,10 @@
 - [ ] 유저 생성
   - [ ] 유저 ID 중복 확인
   - [ ] 유저 생성시 기본 용량 30GB 할당
-- [ ] 유저 정보 조회
+- [x] 유저 정보 조회
   - 필수정보 이름, 계정, 현재 사용량
+- [ ] 유저 로그인관리
+  - [ ] Session 인증 
 
 ## 파일 API
 - [ ] 업로드
@@ -32,7 +34,7 @@
 - userNumber Long pk 유저_관리번호
 - userId String 유저_아이디
 - userPassword String 유저 비밀번호
-- usedStorage Long 유저_스토리지_사용량
+- userStorage Long 유저_스토리지_사용량
 - userRegDate LocaleDate 유저_등록일
 
 ### 폴더 TABLE

@@ -1,7 +1,7 @@
 package com.numble.mybox.controller;
 
-import com.numble.mybox.entity.User;
-import com.numble.mybox.service.UserService;
+import com.numble.mybox.entity.Member;
+import com.numble.mybox.service.MemberService;
 import java.time.LocalDateTime;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -16,27 +16,29 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class UserController {
+public class MemberController {
 
-    private final UserService userService;
+    private final MemberService memberService;
 
     @GetMapping("/api/v1/user/{id}")
     public Result findUser(@PathVariable("id") @Valid Long id) {
-        User user = userService.findUser(id);
-        UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(
-            user.getUserId(), user.getUserStorage(), user.getUserRegDate()
+        Member member = memberService.findMember(id);
+        MemberInfoResponseDto userInfoResponseDto = new MemberInfoResponseDto(
+            member.getUserId(), member.getUserStorage(), member.getUserRegDate()
         );
         return new Result(200, userInfoResponseDto);
     }
 
     @PostMapping("/api/v1/user/create")
-    public String createUser(@RequestBody @Valid CreateUserRequestDto createUserRequestDto) {
+    public String createUser(@RequestBody @Valid CreateMemberRequestDto request) {
+        Member member = new Member(request.getUserId(), request.getPassword());
+        memberService.createMember(member);
         return "1";
     }
 
     @Data
     @AllArgsConstructor
-    static class UserInfoResponseDto {
+    static class MemberInfoResponseDto {
         private String userId;
         private Double userStorage;
         private LocalDateTime userRegDate;
@@ -44,7 +46,7 @@ public class UserController {
 
     @Data
     @NoArgsConstructor
-    static class CreateUserRequestDto {
+    static class CreateMemberRequestDto {
         private String userId;
         private String password;
     }
