@@ -3,16 +3,19 @@ package com.numble.mybox.entity;
 import java.time.LocalDateTime;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_number")
     private Long Id;
 
@@ -30,5 +33,10 @@ public class User {
     @CreatedDate
     @Column(name = "user_reg_date")
     private LocalDateTime userRegDate;
+
+    public User(String userId, String password) {
+        this.userId = userId;
+        this.password = password;
+    }
 
 }
