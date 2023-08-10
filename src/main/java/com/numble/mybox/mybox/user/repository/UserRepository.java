@@ -1,6 +1,6 @@
-package com.numble.mybox.repository;
+package com.numble.mybox.mybox.user.repository;
 
-import com.numble.mybox.entity.User;
+import com.numble.mybox.mybox.user.domain.User;
 import java.util.List;
 import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;

@@ -1,9 +1,10 @@
-package com.numble.mybox.service;
+package com.numble.mybox.user.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.numble.mybox.entity.User;
+import com.numble.mybox.mybox.user.service.UserService;
+import com.numble.mybox.mybox.user.domain.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,4 +1,4 @@
-package com.numble.mybox.entity;
+package com.numble.mybox.mybox.user.domain;
 
 import java.time.LocalDateTime;
 import javax.persistence.*;
