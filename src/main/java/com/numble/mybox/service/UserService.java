@@ -1,6 +1,7 @@
 package com.numble.mybox.service;
 
 import com.numble.mybox.entity.User;
+import com.numble.mybox.exception.UserNotFoundException;
 import com.numble.mybox.repository.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,9 @@ public class UserService {
     private final UserRepository userRepository;
 
     public User findUser(Long id) {
+        if(userRepository.findUser(id) == null) {
+            throw new UserNotFoundException(id);
+        }
         return userRepository.findUser(id);
     }
 
