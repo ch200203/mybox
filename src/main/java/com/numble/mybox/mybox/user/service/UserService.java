@@ -1,7 +1,7 @@
 package com.numble.mybox.mybox.user.service;
 
-import com.numble.mybox.mybox.user.exception.UserNotFoundException;
 import com.numble.mybox.mybox.user.domain.User;
+import com.numble.mybox.mybox.user.exception.UserNotFoundException;
 import com.numble.mybox.mybox.user.repository.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class UserService {
     public User createUser(User user) {
         validateDuplicateUser(user);
         userRepository.createUser(user);
-        return userRepository.findUser(user.getId());
+        return userRepository.findUser(user.getUserNumber());
     }
 
     private void validateDuplicateUser(User user) {

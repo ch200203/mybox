@@ -1,6 +1,5 @@
 package com.numble.mybox.mybox.user.exception;
 
-import com.numble.mybox.user.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/api/")
+@RestController("/api")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -26,7 +26,7 @@ public class UserController {
     public Result findUser(@PathVariable("id") @Valid Long id) {
         User user = userService.findUser(id);
         UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(
-            user.getId(), user.getUserId(), user.getUserStorage(), user.getUserRegDate()
+            user.getUserNumber(), user.getUserId(), user.getUserStorage(), user.getUserRegDate()
         );
         return new Result(HttpStatus.OK, userInfoResponseDto);
     }
@@ -35,13 +35,13 @@ public class UserController {
     public Result createUser(@RequestBody @Valid CreateUserRequestDto requestDto) {
         User user = new User(requestDto.getUserId(), requestDto.getPassword());
         User currentUser = userService.createUser(user);
-        return new Result(HttpStatus.CREATED, new CreateUserResponseDto(currentUser.getId()));
+        return new Result(HttpStatus.CREATED, new CreateUserResponseDto(currentUser.getUserNumber()));
     }
 
     @Data
     @AllArgsConstructor
     static class UserInfoResponseDto {
-        private Long id;
+        private Long userNumber;
         private String userId;
         private Double userStorage;
         private LocalDateTime userRegDate;
