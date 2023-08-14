@@ -1,7 +1,7 @@
-package com.numble.mybox.controller;
+package com.numble.mybox.mybox.user.controller;
 
-import com.numble.mybox.entity.User;
-import com.numble.mybox.service.UserService;
+import com.numble.mybox.mybox.user.domain.User;
+import com.numble.mybox.mybox.user.service.UserService;
 import java.time.LocalDateTime;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -16,32 +16,32 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@RestController("/api")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/api/v1/user/{id}")
+    @GetMapping("/v1/user/{id}")
     public Result findUser(@PathVariable("id") @Valid Long id) {
         User user = userService.findUser(id);
         UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(
-            user.getId(), user.getUserId(), user.getUserStorage(), user.getUserRegDate()
+            user.getUserNumber(), user.getUserId(), user.getUserStorage(), user.getUserRegDate()
         );
         return new Result(HttpStatus.OK, userInfoResponseDto);
     }
 
-    @PostMapping("/api/v1/user/create")
+    @PostMapping("/v1/user/create")
     public Result createUser(@RequestBody @Valid CreateUserRequestDto requestDto) {
         User user = new User(requestDto.getUserId(), requestDto.getPassword());
         User currentUser = userService.createUser(user);
-        return new Result(HttpStatus.CREATED, new CreateUserResponseDto(currentUser.getId()));
+        return new Result(HttpStatus.CREATED, new CreateUserResponseDto(currentUser.getUserNumber()));
     }
 
     @Data
     @AllArgsConstructor
     static class UserInfoResponseDto {
-        private Long id;
+        private Long userNumber;
         private String userId;
         private Double userStorage;
         private LocalDateTime userRegDate;

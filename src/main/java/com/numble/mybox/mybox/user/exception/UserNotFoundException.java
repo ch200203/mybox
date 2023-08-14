@@ -1,4 +1,4 @@
-package com.numble.mybox.exception;
+package com.numble.mybox.mybox.user.exception;
 
 public class UserNotFoundException extends RuntimeException {
 
