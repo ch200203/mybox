@@ -1,6 +1,6 @@
 package com.numble.mybox.mybox.file.repository;
 
-import com.numble.mybox.mybox.file.domain.File;
+import com.numble.mybox.mybox.file.domain.FileEntity;
 import java.util.List;
 import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -12,9 +12,13 @@ public class FileRepository {
 
     private final EntityManager em;
 
-    public List<File> findUserFiles(Long id) {
-        return em.createQuery("select f from File f where f.user.userNumber = :id", File.class)
+    public List<FileEntity> findUserFiles(Long id) {
+        return em.createQuery("select f from FileEntity f where f.user.userNumber = :id", FileEntity.class)
             .setParameter("id", id)
             .getResultList();
+    }
+
+    public void saveFile(FileEntity fileEntity) {
+        em.persist(fileEntity);
     }
 }

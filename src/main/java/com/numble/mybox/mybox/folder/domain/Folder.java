@@ -1,5 +1,6 @@
 package com.numble.mybox.mybox.folder.domain;
 
+import com.numble.mybox.mybox.file.domain.FileEntity;
 import com.numble.mybox.mybox.user.domain.User;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,23 @@ public class Folder {
     @JoinColumn(name = "folder_parent_id", referencedColumnName = "folder_id")
     private Folder parent;
 
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Folder> children = new ArrayList<>();
+    @Column(name = "folder_path")
+    private String folderPath;
 
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Folder> childrenFolders = new ArrayList<>();
+
+    @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FileEntity> childrenFiles = new ArrayList<>();
+
+    public boolean hasSameFileName(String folderName) {
+        return childrenFiles.stream()
+            .filter(f -> folderName.equals(f.getFileName()))
+            .findAny()
+            .isPresent();
+    }
+
+    public void createChildrenFile(FileEntity uploadFile) {
+        childrenFiles.add(uploadFile);
+    }
 }

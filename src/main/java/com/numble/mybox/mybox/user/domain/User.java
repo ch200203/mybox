@@ -1,6 +1,6 @@
 package com.numble.mybox.mybox.user.domain;
 
-import com.numble.mybox.mybox.file.domain.File;
+import com.numble.mybox.mybox.file.domain.FileEntity;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +46,7 @@ public class User {
 
     @OneToMany
     @JoinColumn(name = "file_id")
-    private List<File> userFileList = new ArrayList<>();
+    private List<FileEntity> userFileListEntity = new ArrayList<>();
 
     public User(String userId, String password) {
         this.userId = userId;

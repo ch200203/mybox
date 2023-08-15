@@ -1,5 +1,6 @@
 package com.numble.mybox.mybox.file.domain;
 
+import com.numble.mybox.mybox.folder.domain.Folder;
 import com.numble.mybox.mybox.user.domain.User;
 import java.time.LocalDateTime;
 import javax.persistence.CascadeType;
@@ -12,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -19,9 +22,9 @@ import org.hibernate.annotations.CreationTimestamp;
 
 @Getter
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "file")
-public class File {
+public class FileEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,15 +38,15 @@ public class File {
     @JoinColumn(name = "user_number", referencedColumnName = "user_number")
     private User user;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "folder_id", referencedColumnName = "folder_id", nullable = true)
-//    private Folder folder;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "folder_id", referencedColumnName = "folder_id", nullable = true)
+    private Folder folder;
 
-    @Column(name = "file_path", nullable = false, length = 1000)
+    @Column(name = "file_path", nullable = false)
     private String filePath;
 
     @Column(name = "file_storage", nullable = false)
-    private Long fileStorage;
+    private Double fileSize;
 
     @Column(name = "file_extension", length = 10)
     private String fileExtension;
@@ -51,5 +54,16 @@ public class File {
     @Column(name = "file_reg_date")
     @CreationTimestamp
     private LocalDateTime fileRegDate;
+
+    @Builder
+    public FileEntity(String fileName, User user, Folder folder, String filePath, Double fileSize,
+        String fileExtension) {
+        this.fileName = fileName;
+        this.user = user;
+        this.folder = folder;
+        this.fileSize = fileSize;
+        this.filePath = filePath;
+        this.fileExtension = fileExtension;
+    }
 
 }
