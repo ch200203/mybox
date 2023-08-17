@@ -25,7 +25,7 @@ public class FileController {
 
     @PostMapping("/api/v1/file/upload/{folderId}")
     public ResponseEntity<?> uploadFile(@RequestParam(required = false) MultipartFile file,
-        @PathVariable Long folderId) {
+        @PathVariable("folderId") Long folderId) {
         fileService.uploadFile(file, folderId);
         return ResponseEntity.status(HttpStatus.CREATED).body(folderId);
     }

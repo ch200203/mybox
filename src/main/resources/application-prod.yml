@@ -13,7 +13,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     open-in-view: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
         # show_sql : true
@@ -33,4 +33,4 @@ spring:
 #      maxRequestSize: 30MB
 
 path:
-  upload-path: '/Users/ich/develope/study/numbleMyBox/storage'
+  upload-path: '/Users/ich/develop/study/numbleMyBox/storage'

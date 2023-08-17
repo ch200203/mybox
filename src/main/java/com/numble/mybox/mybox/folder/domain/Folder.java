@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,10 +32,10 @@ public class Folder {
     private Long folderId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
+    @JoinColumn(name = "user_number")
     private User user;
 
-    @Column(name = "folder_name", nullable = false, length = 255)
+    @Column(name = "folder_name", length = 255)
     private String folderName;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -50,11 +51,28 @@ public class Folder {
     @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FileEntity> childrenFiles = new ArrayList<>();
 
-    public boolean hasSameFileName(String folderName) {
+    @Builder
+    public Folder(Long folderId, User user, String folderName, Folder parent, String folderPath, List<Folder> childrenFolders) {
+        this.folderId = folderId;
+        this.user = user;
+        this.folderName = folderName;
+        this.parent = parent;
+        this.folderPath = folderPath;
+        this.childrenFolders = childrenFolders;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public boolean hasSameFileName(String fileName) {
         return childrenFiles.stream()
-            .filter(f -> folderName.equals(f.getFileName()))
-            .findAny()
-            .isPresent();
+            .anyMatch(f -> fileName.equals(f.getFileName()));
+    }
+
+    public boolean hasSameFolderName(String folderName) {
+        return childrenFolders.stream()
+            .anyMatch(f -> folderName.equals(f.getFolderName()));
     }
 
     public void createChildrenFile(FileEntity uploadFile) {

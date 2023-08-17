@@ -3,7 +3,6 @@ package com.numble.mybox.mybox.file.domain;
 import com.numble.mybox.mybox.folder.domain.Folder;
 import com.numble.mybox.mybox.user.domain.User;
 import java.time.LocalDateTime;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -34,8 +33,8 @@ public class FileEntity {
     @Column(name = "file_name", nullable = false, length = 255)
     private String fileName;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_number", referencedColumnName = "user_number")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_number", referencedColumnName = "user_number") // 외래 키 설정
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -65,5 +64,4 @@ public class FileEntity {
         this.filePath = filePath;
         this.fileExtension = fileExtension;
     }
-
 }

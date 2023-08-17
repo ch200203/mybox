@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/api")
+@RestController
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/v1/user/{id}")
+    @GetMapping("/api/v1/user/{id}")
     public Result findUser(@PathVariable("id") @Valid Long id) {
         User user = userService.findUser(id);
         UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(
@@ -31,7 +31,7 @@ public class UserController {
         return new Result(HttpStatus.OK, userInfoResponseDto);
     }
 
-    @PostMapping("/v1/user/create")
+    @PostMapping("/api/v1/user/create")
     public Result createUser(@RequestBody @Valid CreateUserRequestDto requestDto) {
         User user = new User(requestDto.getUserId(), requestDto.getPassword());
         User currentUser = userService.createUser(user);
