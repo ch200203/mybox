@@ -33,4 +33,4 @@ spring:
 #      maxRequestSize: 30MB
 
 path:
-  upload-path: '/Users/ich/develope/study/numbleMyBox/storage'
+  upload-path: '/Users/ich/develop/study/numbleMyBox/storage'

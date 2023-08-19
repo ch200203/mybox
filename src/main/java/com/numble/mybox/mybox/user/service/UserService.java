@@ -16,10 +16,11 @@ public class UserService {
     private final UserRepository userRepository;
 
     public User findUser(Long id) {
-        if(userRepository.findUser(id) == null) {
+        User user = userRepository.findUser(id);
+        if(user == null) {
             throw new UserNotFoundException(id);
         }
-        return userRepository.findUser(id);
+        return user;
     }
 
     @Transactional

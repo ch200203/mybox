@@ -12,8 +12,12 @@ public class UserRepository {
 
     private final EntityManager em;
 
-    public User findUser(Long id) {
-        return em.find(User.class, id);
+    public User findUser(Long userNumber) {
+        return em.find(User.class, userNumber);
+        /*return em.createQuery(
+                "select u from User u where u.userNumber = :userNumber", User.class)
+            .setParameter("userNumber", userNumber)
+            .getSingleResult();*/
     }
 
     public List<User> findUsersById(String userId) {
