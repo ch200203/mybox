@@ -45,11 +45,13 @@ public class FolderRepository {
         String sql = "SELECT f FROM Folder f " +
             "LEFT JOIN FETCH f.childrenFolders " +
             "LEFT JOIN FETCH f.childrenFiles " +
-            "WHERE f.folderId = :folderId ";
+            "WHERE f.folderId = :folderId " +
+            "AND f.User.userNumber = :userNumber";
         Optional<Folder> folder = null;
         try {
             folder = Optional.ofNullable(em.createQuery(sql, Folder.class)
                 .setParameter("folderId", folderId)
+                .setParameter("userNumber", userNumber)
                 .getSingleResult());
             return folder;
         } catch (NoResultException e) {
@@ -59,5 +61,11 @@ public class FolderRepository {
 
     public void createFolder(Folder newFolder) {
         em.persist(newFolder);
+    }
+
+    public int deleteFolder(Long folderId) {
+        return em.createQuery("delete from folder f where f.folder = :folderId")
+            .setParameter("folderId", folderId)
+            .executeUpdate();
     }
 }
