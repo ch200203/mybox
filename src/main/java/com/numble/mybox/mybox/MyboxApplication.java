@@ -1,4 +1,4 @@
-package com.numble.mybox;
+package com.numble.mybox.mybox;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
