@@ -1,9 +1,10 @@
 package com.numble.mybox.mybox.folder.service;
 
+import com.numble.mybox.mybox.file.domain.FileEntity;
 import com.numble.mybox.mybox.folder.domain.Folder;
+import com.numble.mybox.mybox.folder.dto.FolderDto;
 import com.numble.mybox.mybox.folder.dto.request.RequestCreateDto;
 import com.numble.mybox.mybox.folder.dto.request.RequestFindFolderDto;
-import com.numble.mybox.mybox.folder.dto.FolderDto;
 import com.numble.mybox.mybox.folder.exception.FolderDuplicateNameException;
 import com.numble.mybox.mybox.folder.exception.FolderNotFoundException;
 import com.numble.mybox.mybox.folder.repository.FolderRepository;
@@ -66,6 +67,18 @@ public class FolderService {
             newFolder.getUser().getUserNumber()).get().getFolderId();
     }
 
+    @Transactional
+    public int deleteFolder(Long folderId, Long userNumber) {
+        User user = userRepository.findUser(userNumber);
+        Folder folder = folderRepository.findFolderById(folderId, userNumber).orElseThrow(
+            () -> new FolderNotFoundException(folderId)
+        );
+        int result = folderRepository.deleteFolder(folderId);
+        Double updateUserStorage = user.getUserStorage() + calculateTotalSize(folder);
+        user.updateUserStorage(updateUserStorage);
+        return result;
+    }
+
     private String createPath(String path, String folderName) {
         return path + File.separator + folderName;
     }
@@ -99,7 +112,19 @@ public class FolderService {
         }
     }
 
-    public Long deleteFolder(Long folderId) {
-        return 1L;
+    private Double calculateTotalSize(Folder folder) {
+        Double totalSize = 0.0;
+        // 현재 폴더 내의 파일들의 용량 계산
+        for (FileEntity file : folder.getChildrenFiles()) {
+            totalSize += file.getFileSize();
+        }
+
+        // 현재 폴더의 하위 폴더들에 대해 재귀적으로 용량 계산
+        for (Folder childFolder : folder.getChildrenFolders()) {
+            totalSize += calculateTotalSize(childFolder);
+        }
+
+        return totalSize;
     }
+
 }
