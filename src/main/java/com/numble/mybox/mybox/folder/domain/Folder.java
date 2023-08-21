@@ -2,8 +2,8 @@ package com.numble.mybox.mybox.folder.domain;
 
 import com.numble.mybox.mybox.file.domain.FileEntity;
 import com.numble.mybox.mybox.user.domain.User;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -45,14 +45,14 @@ public class Folder {
     @Column(name = "folder_path")
     private String folderPath;
 
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Folder> childrenFolders = new ArrayList<>();
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<Folder> childrenFolders = new HashSet<>();
 
-    @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FileEntity> childrenFiles = new ArrayList<>();
+    @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<FileEntity> childrenFiles = new HashSet<>();
 
     @Builder
-    public Folder(Long folderId, User user, String folderName, Folder parent, String folderPath, List<Folder> childrenFolders) {
+    public Folder(Long folderId, User user, String folderName, Folder parent, String folderPath, Set<Folder> childrenFolders) {
         this.folderId = folderId;
         this.user = user;
         this.folderName = folderName;
@@ -63,6 +63,10 @@ public class Folder {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void setParentFolder(Folder parent) {
+        this.parent = parent;
     }
 
     public boolean hasSameFileName(String fileName) {

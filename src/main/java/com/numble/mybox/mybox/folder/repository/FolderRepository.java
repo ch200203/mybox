@@ -14,12 +14,15 @@ public class FolderRepository {
 
     private final EntityManager em;
 
-    public Optional<Folder> findFolderById(Long folderId) {
+    public Optional<Folder> findFolderById(Long folderId, Long userNumber) {
         Optional<Folder> folder = null;
         try {
             folder = Optional.ofNullable(em.createQuery(
-                    "select f from Folder f where f.folderId = :folderId", Folder.class)
+                    "select f from Folder f "
+                        + "where f.folderId = :folderId "
+                        + "and f.user.userNumber = :userNumber", Folder.class)
                 .setParameter("folderId", folderId)
+                .setParameter("userNumber", userNumber)
                 .getSingleResult());
         } catch (NoResultException e) {
             folder = Optional.empty();
@@ -52,5 +55,9 @@ public class FolderRepository {
         } catch (NoResultException e) {
             return folder = Optional.empty();
         }
+    }
+
+    public void createFolder(Folder newFolder) {
+        em.persist(newFolder);
     }
 }

@@ -3,6 +3,7 @@ package com.numble.mybox.mybox.file.service;
 import com.numble.mybox.mybox.file.domain.FileEntity;
 import com.numble.mybox.mybox.file.repository.FileRepository;
 import com.numble.mybox.mybox.folder.domain.Folder;
+import com.numble.mybox.mybox.folder.exception.FolderNotFoundException;
 import com.numble.mybox.mybox.folder.repository.FolderRepository;
 import java.io.File;
 import java.io.IOException;
@@ -28,17 +29,16 @@ public class FileService {
     }
 
     @Transactional
-    public void uploadFile(MultipartFile multipartFile, Long folderId) {
-        Folder folder = folderRepository.findFolderById(folderId).orElseThrow(
-            () -> new IllegalArgumentException("Folder Not Found")
-        );
+    public void uploadFile(MultipartFile multipartFile, Long folderId, Long userNumber) {
+        Folder folder = folderRepository.findFolderById(folderId, userNumber).orElseThrow(
+            () -> new FolderNotFoundException(folderId));
 
         String fileName = multipartFile.getOriginalFilename();
         String fileExtension = StringUtils.getFilenameExtension(fileName);
         double fileSize = multipartFile.getSize();
         String filePath = STORAGE_PATH + folder.getFolderPath();
 
-        validateUploadFile(folder, fileName);
+        validateUploadFile(folder, fileName, fileSize);
 
         FileEntity uploadFile = FileEntity.builder()
             .fileName(fileName)
@@ -55,7 +55,7 @@ public class FileService {
         fileRepository.saveFile(uploadFile);
     }
 
-    private void validateUploadFile(Folder parentFolder, String fileName) {
+    private void validateUploadFile(Folder parentFolder, String fileName, Double fileSize) {
         // 중복되는 파일명 확인
         if (parentFolder.hasSameFileName(fileName)) {
             throw new IllegalArgumentException("Duplicate FileName");
@@ -64,6 +64,9 @@ public class FileService {
         // 세션 확인
 
         // 남아있는 용량 확인
+        if(parentFolder.getUser().hasStorage(fileSize)) {
+            throw new IllegalArgumentException("File Size Over Exception");
+        }
     }
 
     private void saveFile(String filePath, MultipartFile multipartFile) {
@@ -72,5 +75,10 @@ public class FileService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Transactional
+    public void deleteFile(Long fileId) {
+        fileRepository.deleteFile(fileId);
     }
 }

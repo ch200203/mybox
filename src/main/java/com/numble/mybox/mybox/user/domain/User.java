@@ -52,5 +52,9 @@ public class User {
         this.userId = userId;
         this.password = password;
     }
+
+    public boolean hasStorage(Double fileSize) {
+        return userStorage + fileSize > 30;
+    }
 }
 
