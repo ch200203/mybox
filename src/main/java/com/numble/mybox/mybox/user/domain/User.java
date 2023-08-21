@@ -56,5 +56,9 @@ public class User {
     public boolean hasStorage(Double fileSize) {
         return userStorage + fileSize > 30;
     }
+
+    public void updateUserStorage(Double updateUserStorage) {
+        this.userStorage = updateUserStorage;
+    }
 }
 
