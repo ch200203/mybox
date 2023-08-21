@@ -21,4 +21,10 @@ public class FileRepository {
     public void saveFile(FileEntity fileEntity) {
         em.persist(fileEntity);
     }
+
+    public void deleteFile(Long fileId) {
+        em.createQuery("delete from File where f.fileId = :fileId")
+            .setParameter("fileId", fileId)
+            .executeUpdate();
+    }
 }
